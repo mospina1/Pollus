@@ -1,0 +1,21 @@
+body { 
+  text-align: center; 
+  background: #0042cf; 
+  color: rgba(0,0,0,0.87); 
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 50px;
+  margin: 0; 
+  padding: 0; }
+#selection { text-align: center; } 
+#selection button {
+  padding: 100px 200px;
+  border-radius: 100px;
+  background-color:rgb(11, 90, 160);
+  cursor: pointer;
+  transition: background-color 0.5s;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 35px;
+} 
+#selection button:hover{
+  background-color:rgb(14, 130, 233);
+}
