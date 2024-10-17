@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 const website = "https://pollus-cs190.web.app/";
 //Examinee Button
 document.getElementById("E").onclick = function(){
-  document.location.href = `/examinee/homepage.html`;
+  document.location.href = `/examinee/Codepage.html`;
 }
 //Presenter Button
 document.getElementById("P").onclick = function(){
