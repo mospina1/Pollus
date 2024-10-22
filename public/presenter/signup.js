@@ -16,7 +16,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
-
+const back = document.getElementById("back");
+back?.addEventListener("click", clickEvent => {
+    document.location.href = "../index.html"
+});
+const login = document.getElementById("login");
+login?.addEventListener("click", clickEvent => {
+    document.location.href = "login.html"
+});
 const button = document.getElementById("submit");
 button?.addEventListener("click", clickEvent => {
 
