@@ -19,3 +19,6 @@ body {
 #selection button:hover{
   background-color:rgb(14, 130, 233);
 }
+label {
+  font-size: 16px;
+}

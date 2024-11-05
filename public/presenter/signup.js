@@ -1,5 +1,6 @@
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js';
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+import { createUserWithEmailAndPassword, getAuth, signOut } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+import { initializeApp} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -12,10 +13,15 @@ const firebaseConfig = {
     measurementId: "G-LWWGNLWPEG"
 };
 
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth();
+const db = getFirestore();
+// const logout = async () => {
+//     await signOut(auth);
+// };
+
 const back = document.getElementById("back");
 back?.addEventListener("click", clickEvent => {
     document.location.href = "../index.html"
@@ -31,10 +37,11 @@ button?.addEventListener("click", clickEvent => {
     //     if(user == null) { return;}
         
     // });
-
+    // logout();
     let email = document.getElementById("username").value;
     let password= document.getElementById("password").value;
     let confirm = document.getElementById("confirmation").value;
+    let name = document.getElementById("name").value;
 
     if (password === confirm)
     {
@@ -42,15 +49,22 @@ button?.addEventListener("click", clickEvent => {
             .then((userCredentials) => {
                 // created account successfully
                 const user = userCredentials.user;
+                const userDoc = doc(db, `presenters/${user.uid}`);
+                const userData = {name: `${name}`}
+                setDoc(userDoc, userData).then(() => {
+                    console.log(`Hi ${name}!`)
+                }).catch((error => {
+                    alert(error.message);
+                }));
+           }).then(() => {
                 alert("Account created");
-                document.location.href = `/presenter/login.html`;
-
+                document.location.href = `/presenter/login.html`
             }).catch((error) => {
                 //do something here with error
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 alert(errorMessage);
-            });
+            });    
     }
     else
     {

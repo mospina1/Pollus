@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pollus Web App</title>
     <link rel="stylesheet" href="../stylesheet.css">
@@ -9,5 +9,11 @@
   </head>
   <body>
     <h1>Presenter Homepage</h1>
+    <h2>Welcome, <span id="name"></span></h2>
+    <button id="upload">Upload Poll</button>
+    <input type="number" id="time per question" placeholder="Time Per Question">
+    <button id="export">Export Results</button>
+    <button id="start">Start Lobby</button>
+    <script defer type="module" src="homepage.js"></script>
   </body>
 </html>

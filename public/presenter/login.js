@@ -1,5 +1,5 @@
-import { signInWithEmailAndPassword, getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js';
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+import { signInWithEmailAndPassword, getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBlGRwzi9bkETIXnjWPHST3g1sqVkkYCY4",
@@ -16,7 +16,12 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 
+// const logout = async () => {
+//     await signOut(auth);
+// };
+//logout();
 const create = document.getElementById("create");
+
 create?.addEventListener("click", clickEvent => {
     document.location.href = "signup.html";
 });
@@ -26,10 +31,8 @@ button?.addEventListener("click", clickEvent => {
     let email = document.getElementById("email").value;
     let password= document.getElementById("password").value;
     signInWithEmailAndPassword(auth, email, password)
-        .then((userCredentials) => {
-            // logged in successfully
-            const user = userCredentials.user;
-            localStorage.setItem('loggedInUserId', user.uid)
+        .then((user) => {
+            // logged in successfully            
             alert("Login Successful");
             document.location.href = `/presenter/homepage.html`;
         }).catch(error => {
