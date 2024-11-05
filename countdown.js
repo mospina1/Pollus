@@ -14,3 +14,8 @@ function updateCountdown() {
     time--;
     time = time < 0 ? 0 : time;
 }
+function redirectpage()
+{
+    window.location="http://www.google.com";  
+}
+setTimeout('redirectpage()', 17000);
