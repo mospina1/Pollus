@@ -20,18 +20,21 @@ const auth = getAuth();
 const nameHTML = document.getElementById("name");
 
 onAuthStateChanged(auth, (user) => {
-    if (user) {
+    if (user)
+    {
       const uid = user.uid;
       let presenter = auth.currentUser;
       nameHTML.textContent = getPresenterName(presenter);
-    } else {
+    }
+    else
+    {
         console.log("Failed")
     }
 });
 
 async function getPresenterName(presenter)
 {
-    if(presenter)
+    if (presenter)
     {
         const docRef = doc(db, "presenters",`${presenter.uid}`);
         const snapshot = await getDoc(docRef);
