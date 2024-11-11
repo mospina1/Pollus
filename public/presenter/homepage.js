@@ -17,13 +17,12 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 const auth = getAuth();
 
-let presenter;
 const nameHTML = document.getElementById("name");
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
-      presenter = auth.currentUser;
+      let presenter = auth.currentUser;
       nameHTML.textContent = getPresenterName(presenter);
     } else {
         console.log("Failed")
@@ -45,5 +44,6 @@ async function getPresenterName(presenter)
     return presenter;
 }
 
-
-
+document.getElementById("upload").onclick = function(){
+    document.location.href = `/presenter/upload.html`;
+  }
