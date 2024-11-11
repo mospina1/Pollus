@@ -23,7 +23,7 @@ onAuthStateChanged(auth, (user) => {
     const uid = user.uid;
     presenter = auth.currentUser;
   } else {
-      console.log("Failed");
+    document.location.href = "login.html";
   }
 });
 

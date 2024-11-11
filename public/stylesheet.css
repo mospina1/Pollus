@@ -22,19 +22,32 @@ body {
 label {
   font-size: 16px;
 }
-#preview table {
+.preview table {
   width: 90%;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
 }
 
-#preview th, td {
+#output th, #output td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
 }
 
-#preview th {
+#output th {
   background-color: #f2f2f2;
+}
+
+.preview h3, .preview p {
+  margin: 5px 50px;
+  text-align: left;
+}
+.preview p {
+  font-size: 20px;
+}
+.preview br {
+  content: "";
+  display: block;
+  font-size: 200%;
 }
