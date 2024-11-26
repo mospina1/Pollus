@@ -46,8 +46,7 @@ label {
 .preview p {
   font-size: 20px;
 }
-.preview br {
-  content: "";
-  display: block;
-  font-size: 200%;
+
+#graph canvas {
+  padding: 25% 25%
 }
