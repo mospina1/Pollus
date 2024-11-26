@@ -32,12 +32,6 @@ login?.addEventListener("click", clickEvent => {
 });
 const button = document.getElementById("submit");
 button?.addEventListener("click", clickEvent => {
-
-    // onAuthStateChanged(auth, user => {
-    //     if(user == null) { return;}
-        
-    // });
-    // logout();
     let email = document.getElementById("username").value;
     let password= document.getElementById("password").value;
     let confirm = document.getElementById("confirmation").value;
@@ -50,13 +44,13 @@ button?.addEventListener("click", clickEvent => {
                 // created account successfully
                 const user = userCredentials.user;
                 const userDoc = doc(db, `presenters/${user.uid}`);
-                const userData = {name: `${name}`}
+                const userData = {name: `${name}`};
                 setDoc(userDoc, userData).then(() => {
-                    console.log(`Hi ${name}!`)
+                    console.log(`Hi ${name}!`);
                 }).catch((error => {
                     alert(error.message);
                 }));
-           }).then(() => {
+            }).then(() => {
                 alert("Account created");
                 document.location.href = `/presenter/login.html`
             }).catch((error) => {
