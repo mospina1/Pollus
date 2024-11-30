@@ -9,18 +9,21 @@
         <link rel="stylesheet" href="../stylesheet.css">
     </head>
     <body>
-        <p id="countdown"></p>
-        <div>
-            <canvas id = "graph"></canvas>
+        <div id="lobby">
+            <h1>Welcome to the Lobby</h1>
+            <p id="names"></p>
+            <button id="start-poll">Start Poll</button>
         </div>
-            <div>
-                <h1 id="question"></h1>
-                <div>
-                <button id="A"></button>
-                <button id="B"></button> <br>
-                <button id="C"></button>
-                <button id="D"></button>
-            </div> 
+        
+        <div id="results">
+        </div>
+        <div id="question">
+            <p id="countdown"></p>
+            <h1 id="text"></h1>
+            <button id="A"></button>
+            <button id="B"></button> <br>
+            <button id="C"></button>
+            <button id="D"></button>
         </div>
     <script defer type="module" src="poll.js"></script>
     </body>

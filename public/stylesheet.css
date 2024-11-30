@@ -37,6 +37,29 @@ body {
   background-color:rgb(192, 128, 0);
 }
 
+#start-poll {
+  padding: 50px 100px;
+  border-radius: 50px;
+  background-color:rgb(11, 90, 160);
+  cursor: pointer;
+  transition: background-color 0.5s;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 35px;
+}
+
+#back {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color:rgb(11, 90, 160);
+  cursor: pointer;
+  transition: background-color 0.5s;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#start-poll :hover{
+  background-color:rgb(14, 130, 233);
+}
+
 #selection button {
   padding: 100px 200px;
   border-radius: 100px;

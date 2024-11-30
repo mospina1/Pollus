@@ -56,18 +56,23 @@ class Poll
         this.#questions.push(question);
     }
 }
-
 let presenter;
 let timer;
 let time;
 let poll = new Poll();
+let pollSize;
 onAuthStateChanged(auth, (user) => {
   if (user)
   {
     const uid = user.uid;
     presenter = auth.currentUser;
     getTime(presenter);
-    getPoll(presenter).then(displayPoll);
+    getPoll(presenter);
+    hideQuestion();
+    document.getElementById("start-poll").onclick = function() {
+        hideLobby();
+        displayPoll();     
+    }
   }
   else
   {
@@ -75,13 +80,26 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-let text = document.getElementById("question");
+const purple = "rgba(192, 0, 192, 1)";
+const teal = "rgba(0, 192, 192, 1)";
+const yellow = "rgba(192, 192, 0, 1)";
+const orange = "rgba(192, 128, 0, 1)";
+
+let lobby = document.getElementById("lobby");
+let results = document.getElementById("results");
+let question = document.getElementById("question");
+let text = document.getElementById("text");
 let a = document.getElementById("A");
 let b = document.getElementById("B");
 let c = document.getElementById("C");
 let d = document.getElementById("D");
 const countdown = document.getElementById('countdown');
 setInterval(updateCountdown, 1000);
+
+function hideLobby()
+{
+    lobby.style.display = "none";
+}
 
 function sleep(ms)
 {
@@ -90,9 +108,38 @@ function sleep(ms)
 
 async function displayPoll()
 {
-    displayQuestion();
-    await sleep(time * 1000);
-    displayCorrectAnswer(poll.getCurrentQuestion()).then(displayResults);
+    for (let i = 0; i < pollSize; i++)
+    {
+        hideResults();
+        displayQuestion();
+        await sleep(time * 1000);
+        displayCorrectAnswer(poll.getCurrentQuestion());
+        await sleep(2000);
+        hideQuestion();
+        await displayResults();
+        await sleep(5000);
+        poll.nextQuestion();
+        timer = time;
+    }
+    hideResults();
+    endPoll();
+}
+
+function endPoll()
+{
+    results.style.display = "block";
+    results.innerHTML += "<h1>You can export the results from the Presenter Homepage.</h1>";
+    results.innerHTML += "<p>Press the Go Back Button to go to the Presenter Homepage.</p>"
+    results.innerHTML += '<button id="back">Go Back</button>';
+    let back = document.getElementById("back");
+    back.onclick = function() {
+        document.location.href = "homepage.html";
+    }
+}
+
+function hideQuestion()
+{
+    question.style.display = "none";
 }
 
 function generateRandomOption(letters)
@@ -135,7 +182,7 @@ async function displayCorrectAnswer(question)
                     d.style.backgroundColor = "rgb(192,0,0)";
                     break;
             }
-            await sleep(250);
+            await sleep(333);
             option = generateRandomOption(options);
         }
     }
@@ -156,16 +203,18 @@ async function displayCorrectAnswer(question)
     }
 }
 
-function displayResults()
+function hideResults()
 {
-    const ctx = document.getElementById('graph');
+    results.style.display = "none";
+    results.innerHTML = "";
+}
 
-    const purple = "rgba(192, 0, 192, 1)";
-    const teal = "rgba(0, 192, 192, 1)";
-    const yellow = "rgba(192, 192, 0, 1)";
-    const orange = "rgba(192, 128, 0, 1)";
+async function displayResults()
+{
+    results.style.display = "block";
+    results.innerHTML += `<canvas id = "graph"></canvas>`
 
-    let question = 1;
+    let ctx = document.getElementById('graph');
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -192,12 +241,17 @@ function displayResults()
 
 function displayQuestion()
 {
+    question.style.display = "block";
     let currQuestion = poll.getCurrentQuestion()
     text.textContent = currQuestion.question;
     a.textContent = currQuestion.a;
     b.textContent = currQuestion.b;
     c.textContent = currQuestion.c;
     d.textContent = currQuestion.d;
+    a.style.backgroundColor = purple;
+    b.style.backgroundColor = teal;
+    c.style.backgroundColor = yellow;
+    d.style.backgroundColor = orange;
 }
 
 async function getTime(presenter)
@@ -224,7 +278,7 @@ function updateCountdown()
     countdown.textContent = `${seconds}`;
     
     timer--;
-    // timer = timer < 0 ? time : timer;
+    timer = timer < 0 ? 0 : timer;
 }
 
 async function getQuestion(pollRef, index)
@@ -244,7 +298,7 @@ async function getPoll(presenter)
     }
     const pollRef = collection(db, `polls/${presenter.uid}/questions`);
     let snapshot = await getDocs(pollRef);
-    let pollSize = snapshot.size;
+    pollSize = snapshot.size;
     for (let i = 1; i <= pollSize; i++)
     {
         poll.addQuestion(await getQuestion(pollRef, i));

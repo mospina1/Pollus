@@ -71,5 +71,8 @@ async function getPresenterName(presenter)
 }
 
 document.getElementById("upload").onclick = function(){
-    document.location.href = `/presenter/upload.html`;
+    document.location.href = `upload.html`;
   }
+document.getElementById("start").onclick = function(){
+    document.location.href = 'poll.html'
+}
