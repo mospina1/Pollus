@@ -1,6 +1,7 @@
 import { getFirestore, getDoc, doc, collection, getDocs} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+import "https://cdn.jsdelivr.net/npm/chart.js"
 
 const firebaseConfig = {
     apiKey: "AIzaSyBlGRwzi9bkETIXnjWPHST3g1sqVkkYCY4",
@@ -82,28 +83,116 @@ let d = document.getElementById("D");
 const countdown = document.getElementById('countdown');
 setInterval(updateCountdown, 1000);
 
+function sleep(ms)
+{
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function displayPoll()
 {
-    console.log(poll);
     displayQuestion();
-    displayCorrectAnswer();
-    displayResults();
+    await sleep(time * 1000);
+    displayCorrectAnswer(poll.getCurrentQuestion()).then(displayResults);
 }
-function displayCorrectAnswer()
-{
 
+function generateRandomOption(letters)
+{
+    const randomIndex = Math.floor(Math.random() * letters.length);
+    console.log(letters);
+    return letters[randomIndex];
+}
+
+// after timer is up all wrong answers will light up one by one red(every .25 seconds), while the correct answer lights up last
+async function displayCorrectAnswer(question)
+{
+    let options = "ABCD";
+    let option = generateRandomOption(options);
+    while(options.length > 1)
+    {
+        if (question.answer.includes(option))
+        {
+            option = generateRandomOption(options);
+        }
+        else
+        {
+            let index;
+            switch(option)
+            {
+                case "A":
+                    options = options.replace("A", "");
+                    a.style.backgroundColor = "rgb(192,0,0)";
+                    break;
+                case "B":
+                    options = options.replace("B", "");
+                    b.style.backgroundColor = "rgb(192,0,0)";
+                    break;
+                case "C":
+                    options = options.replace("C", "");
+                    c.style.backgroundColor = "rgb(192,0,0)";
+                    break;
+                case "D":
+                    options= options.replace("D", "");
+                    d.style.backgroundColor = "rgb(192,0,0)";
+                    break;
+            }
+            await sleep(250);
+            option = generateRandomOption(options);
+        }
+    }
+    switch(options[0])
+    {
+        case "A":
+            a.style.backgroundColor = "rgb(0,192,0)";
+            break;
+        case "B":
+            b.style.backgroundColor = "rgb(0,192,0)";
+            break;
+        case "C":
+            c.style.backgroundColor = "rgb(0,192,0)";
+            break;
+        case "D":
+            d.style.backgroundColor = "rgb(0,192,0)";
+            break;
+    }
 }
 
 function displayResults()
 {
+    const ctx = document.getElementById('graph');
 
+    const purple = "rgba(192, 0, 192, 1)";
+    const teal = "rgba(0, 192, 192, 1)";
+    const yellow = "rgba(192, 192, 0, 1)";
+    const orange = "rgba(192, 128, 0, 1)";
+
+    let question = 1;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels:['A','B','C','D'],
+            datasets: [
+                {
+                    label: "Answers Chosen",
+                    data: [4, 5, 6, 3],
+                    borderColor: [purple, teal, yellow, orange],
+                    backgroundColor: [purple, teal, yellow, orange],
+                    borderWidth: 1
+                },
+            ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 }
 
-// after timer is up all wrong answers will light up one by one red(every .25 seconds), while the correct answer lights up last
 function displayQuestion()
 {
     let currQuestion = poll.getCurrentQuestion()
-    console.log(currQuestion);
     text.textContent = currQuestion.question;
     a.textContent = currQuestion.a;
     b.textContent = currQuestion.b;

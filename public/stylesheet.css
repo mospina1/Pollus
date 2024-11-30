@@ -6,7 +6,37 @@ body {
   font-size: 50px;
   margin: 0; 
   padding: 0; }
-#selection { text-align: center; } 
+#selection, #A, #B, #C, #D { text-align: center; }
+#graph{
+  size: 80%
+}
+#A, #B, #C, #D {
+  padding: 50px 100px;
+  border-radius: 50px;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 35px;
+  cursor: pointer;
+  width: 300px;
+  height: 200px;
+  margin: 1%;
+  vertical-align: middle;
+}
+#A {
+  background-color:rgb(192, 0, 192);
+}
+
+#B {
+  background-color:rgb(0, 192, 192);
+}
+
+#C {
+  background-color:rgb(192, 192, 0);
+}
+
+#D {
+  background-color:rgb(192, 128, 0);
+}
+
 #selection button {
   padding: 100px 200px;
   border-radius: 100px;
@@ -45,8 +75,4 @@ label {
 }
 .preview p {
   font-size: 20px;
-}
-
-#graph canvas {
-  padding: 25% 25%
 }
