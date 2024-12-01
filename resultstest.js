@@ -8,20 +8,20 @@ function createResultsFile() {
         "Jane Smith\t95\t92\t89\t88\t85\t82\t91\t94\t93\t90",
         "Bob Johnson\t88\t90\t92\t89\t86\t83\t90\t93\t91\t88"
     ];
-    /*
+    
     // remove smaple data after and change code under *****
-    for (let i = 0; i < num_of_examinees; i++) {
-        let examnee_name = (examinee name from database);
+    for (let i = 0; i < num_of_examinees; i++) 
+    {
+        let examinee_name = ; // examinee name from data base
 
         content += examnee_name +"\t";
         for (let j = 0; j < num_of_questions; i++)
         {
-        let examnee_answer = (0/1 for if q was right or wrong for question #j)
+        let examnee_answer = ; // 0/1 for if q was right or wrong for question #j)
         content += examnee_ansmer + "\t";
         }
         content += "\n";
     }
-    */
 
     // Add the sample data to the content **************
     sampleData.forEach(item => {

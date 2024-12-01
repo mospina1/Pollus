@@ -1,4 +1,4 @@
-import { getFirestore, getDoc, doc, collection, getDocs} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getFirestore, getDoc, doc, collection, getDocs, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import "https://cdn.jsdelivr.net/npm/chart.js"
@@ -33,27 +33,32 @@ class Question
 
 class Poll
 {
-    #questions;
-    #index = 0;
+    questions;
+    index = 0;
 
     constructor()
     {
-        this.#questions = [];
+        this.questions = [];
     }
     
     nextQuestion()
     {
-        this.#index++;
+        this.index++;
     }
 
     getCurrentQuestion()
-    {   let currQuestion = this.#questions[this.#index];
+    {   let currQuestion = this.questions[this.index];
         return currQuestion;
+    }
+
+    getQuestion(index)
+    {
+        return this.questions[index];
     }
 
     addQuestion(question)
     {
-        this.#questions.push(question);
+        this.questions.push(question);
     }
 }
 let presenter;
@@ -61,24 +66,52 @@ let timer;
 let time;
 let poll = new Poll();
 let pollSize;
+let pollRef;
 onAuthStateChanged(auth, (user) => {
   if (user)
   {
     const uid = user.uid;
     presenter = auth.currentUser;
+    pollRef = doc(db, `polls/${presenter.uid}`);
     getTime(presenter);
     getPoll(presenter);
+    initializePoll();
     hideQuestion();
-    document.getElementById("start-poll").onclick = function() {
-        hideLobby();
-        displayPoll();     
-    }
+    checkPoll();
   }
   else
   {
     document.location.href = "login.html";
   }
 });
+
+// resumes poll if in progress and starts poll if not in progress
+async function checkPoll()
+{
+    let pollStatus = await getPollStatus();
+    console.log(pollStatus)
+    if (pollStatus == true)
+    {
+        hideLobby();
+        displayPoll();
+    }
+    else if (pollStatus == false)
+    {
+        document.getElementById("start-poll")?.addEventListener("click", clickEvent => {
+            clickEvent.preventDefault();
+            startPoll();
+            hideLobby();
+            displayPoll(); 
+        });
+    }
+}
+
+async function getPollStatus()
+{
+    let snapshot = await getDoc(pollRef);
+    let pollStatus = snapshot.data().ongoingPoll;
+    return pollStatus;
+}
 
 const purple = "rgba(192, 0, 192, 1)";
 const teal = "rgba(0, 192, 192, 1)";
@@ -94,7 +127,7 @@ let b = document.getElementById("B");
 let c = document.getElementById("C");
 let d = document.getElementById("D");
 const countdown = document.getElementById('countdown');
-setInterval(updateCountdown, 1000);
+setInterval(await updateCountdown, 1000);
 
 function hideLobby()
 {
@@ -106,27 +139,94 @@ function sleep(ms)
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function displayPoll()
+async function initializePoll()
 {
-    for (let i = 0; i < pollSize; i++)
+    let snapshot = await getDoc(pollRef);
+    let exists = snapshot.data().ongoingPoll;
+    if (!exists)
     {
-        hideResults();
-        displayQuestion();
-        await sleep(time * 1000);
-        displayCorrectAnswer(poll.getCurrentQuestion());
-        await sleep(2000);
-        hideQuestion();
-        await displayResults();
-        await sleep(5000);
-        poll.nextQuestion();
-        timer = time;
+        let data = {
+            ongoingPoll: false,
+        }
+        await updateDoc(pollRef, data);
     }
-    hideResults();
-    endPoll();
 }
 
-function endPoll()
+//also set a personal score tracker to the examinee side
+// possibly pass the current question to the databse to keep track of the what question the examinee should be on and pass it out to them
+async function setQuestion(index)
 {
+    let curr = poll.getQuestion(index);
+    let questionData = {
+        question:`${curr.question}`,
+        A: `${curr.a}`,
+        B: `${curr.b}`,
+        C: `${curr.c}`,
+        D: `${curr.d}`,
+        answer: `${curr.answer}`
+      };
+    await setDoc(doc(collection(pollRef, "current question"), `question`), questionData);
+    let data = { 
+        questionIndex: Number(index)
+    };
+    updateDoc(pollRef, data);
+}
+
+async function getQuestionIndex()
+{
+    let snapshot = await getDoc(pollRef);
+    let index = snapshot.data().questionIndex;
+    return index;
+}
+
+async function displayPoll()
+{
+    let i = await getQuestionIndex();
+    let pollStatus = await getPollStatus();
+    while (pollStatus == true)
+    {
+        await resetCurrentTime();
+        hideResults();
+        await displayQuestion();
+        await displayCorrectAnswer(poll.getQuestion(i));
+        hideQuestion();
+        await displayResults();
+        i = await getQuestionIndex();
+        i += 1;
+        if (pollSize <= i)
+        {
+            hideQuestion();
+            hideResults();
+            endPoll();
+            break;
+        }
+        setQuestion(i);
+        pollStatus = await getPollStatus();
+    }
+}
+
+async function getCurrentTime()
+{
+    let snapshot = await getDoc(pollRef);
+    let currTime = snapshot.data().currentTime;
+    return currTime;
+}
+
+async function startPoll()
+{
+    let data = { 
+        ongoingPoll: true,
+        currentTime: Number(time),
+        questionIndex: Number(0)
+    }
+    await updateDoc(pollRef, data);
+    setQuestion(0);
+    await resetCurrentTime();
+}
+
+async function endPoll()
+{
+    await updateDoc(pollRef, { ongoingPoll: false });
     results.style.display = "block";
     results.innerHTML += "<h1>You can export the results from the Presenter Homepage.</h1>";
     results.innerHTML += "<p>Press the Go Back Button to go to the Presenter Homepage.</p>"
@@ -162,7 +262,6 @@ async function displayCorrectAnswer(question)
         }
         else
         {
-            let index;
             switch(option)
             {
                 case "A":
@@ -201,6 +300,12 @@ async function displayCorrectAnswer(question)
             d.style.backgroundColor = "rgb(0,192,0)";
             break;
     }
+    await sleep(2000);
+}
+
+async function resetCurrentTime()
+{
+    await updateDoc(pollRef, { currentTime: Number(time)})
 }
 
 function hideResults()
@@ -215,7 +320,7 @@ async function displayResults()
     results.innerHTML += `<canvas id = "graph"></canvas>`
 
     let ctx = document.getElementById('graph');
-    new Chart(ctx, {
+    let chart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels:['A','B','C','D'],
@@ -237,12 +342,17 @@ async function displayResults()
             }
         }
     });
+    for (let i = 5; i > 0; i--)
+    {
+        console.log(i);
+        await sleep(1000);
+    }
 }
 
-function displayQuestion()
+async function displayQuestion()
 {
     question.style.display = "block";
-    let currQuestion = poll.getCurrentQuestion()
+    let currQuestion = await getCurrentQuestion(presenter);
     text.textContent = currQuestion.question;
     a.textContent = currQuestion.a;
     b.textContent = currQuestion.b;
@@ -252,6 +362,8 @@ function displayQuestion()
     b.style.backgroundColor = teal;
     c.style.backgroundColor = yellow;
     d.style.backgroundColor = orange;
+    timer = await getCurrentTime();
+    await sleep(timer * 1000);
 }
 
 async function getTime(presenter)
@@ -260,17 +372,14 @@ async function getTime(presenter)
     {
         return;
     }
-    const pollRef = doc(db, "polls",`${presenter.uid}`);
     let snapshot = await getDoc(pollRef);
     let data = snapshot.data();
     time = Number(data.time);
-    timer = time;
 }
 
-
-
-function updateCountdown()
+async function updateCountdown()
 {
+    timer = await getCurrentTime();
     let seconds = timer;
 
     seconds = seconds < 10 ? '0' + seconds : seconds;
@@ -279,6 +388,11 @@ function updateCountdown()
     
     timer--;
     timer = timer < 0 ? 0 : timer;
+
+    let data = { 
+        currentTime: Number(timer),
+     };
+    updateDoc(pollRef, data);
 }
 
 async function getQuestion(pollRef, index)
@@ -290,17 +404,29 @@ async function getQuestion(pollRef, index)
     return question;
 }
 
+async function getCurrentQuestion(presenter)
+{
+    if (!presenter)
+    {
+        return;
+    }
+    let snapshot = await getDoc(doc(collection(pollRef, "current question"), `question`));
+    let data = snapshot.data();
+    let question = new Question(data.question, data.A, data.B, data.C, data.D, data.answer);
+    return question;
+}
+
 async function getPoll(presenter)
 {
     if (!presenter)
     {
         return;
     }
-    const pollRef = collection(db, `polls/${presenter.uid}/questions`);
-    let snapshot = await getDocs(pollRef);
+    const questionsRef = collection(db, `polls/${presenter.uid}/questions`);
+    let snapshot = await getDocs(questionsRef);
     pollSize = snapshot.size;
     for (let i = 1; i <= pollSize; i++)
     {
-        poll.addQuestion(await getQuestion(pollRef, i));
+        poll.addQuestion(await getQuestion(questionsRef, i));
     }
 }
