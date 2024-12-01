@@ -75,7 +75,6 @@ onAuthStateChanged(auth, (user) => {
     pollRef = doc(db, "polls", `${presenter.uid}`);
     getTime(presenter);
     getPoll(presenter);
-    initializePoll();
     hideQuestion();
     checkPoll();
   }
@@ -90,9 +89,15 @@ async function checkPoll()
 {
     let pollStatus = await getPollStatus();
     console.log(pollStatus)
+    if (pollStatus == undefined)
+    {
+        initializePoll();
+        checkPoll();
+    }
     if (pollStatus == true)
     {
         hideLobby();
+        startCountdown();
         displayPoll();
     }
     else if (pollStatus == false)
@@ -100,6 +105,7 @@ async function checkPoll()
         document.getElementById("start-poll")?.addEventListener("click", clickEvent => {
             clickEvent.preventDefault();
             startPoll();
+            startCountdown();
             hideLobby();
             displayPoll(); 
         });
@@ -127,7 +133,11 @@ let b = document.getElementById("B");
 let c = document.getElementById("C");
 let d = document.getElementById("D");
 const countdown = document.getElementById('countdown');
-setInterval(await updateCountdown, 1000);
+
+async function startCountdown()
+{
+    setInterval(await updateCountdown, 1000);
+}
 
 function hideLobby()
 {
@@ -141,15 +151,11 @@ function sleep(ms)
 
 async function initializePoll()
 {
-    let snapshot = await getDoc(pollRef);
-    let exists = snapshot.data().ongoingPoll;
-    if (!exists)
-    {
-        let data = {
+    let data = {
             ongoingPoll: false,
-        }
-        await updateDoc(pollRef, data);
+            questionIndex: Number(0)
     }
+    await updateDoc(pollRef, data);
 }
 
 //also set a personal score tracker to the examinee side
@@ -185,7 +191,10 @@ async function displayPoll()
     let pollStatus = await getPollStatus();
     while (pollStatus == true)
     {
-        await resetCurrentTime();
+        if (timer == 0)
+        {
+            await resetCurrentTime();
+        }
         hideResults();
         await displayQuestion();
         await displayCorrectAnswer(poll.getQuestion(i));
