@@ -1,4 +1,4 @@
-import { getFirestore, getDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getFirestore, getDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut} from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 
@@ -55,7 +55,8 @@ setTime.onclick = async function () {
         return;
     }
     const time = { time: Number(tpq.value) };
-    await updateDoc(pollRef, time);
+    await setDoc(pollRef, time);
+    alert("Time successfully set.");
 }
 
 async function getPresenterName(presenter)

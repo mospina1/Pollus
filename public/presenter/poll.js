@@ -72,7 +72,7 @@ onAuthStateChanged(auth, (user) => {
   {
     const uid = user.uid;
     presenter = auth.currentUser;
-    pollRef = doc(db, `polls/${presenter.uid}`);
+    pollRef = doc(db, "polls", `${presenter.uid}`);
     getTime(presenter);
     getPoll(presenter);
     initializePoll();

@@ -13,22 +13,18 @@ const firebaseConfig = {
     measurementId: "G-LWWGNLWPEG"
 };
 
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
-// const logout = async () => {
-//     await signOut(auth);
-// };
 
 const back = document.getElementById("back");
 back?.addEventListener("click", clickEvent => {
-    document.location.href = "../index.html"
+    document.location.href = "../index.html";
 });
 const login = document.getElementById("login");
 login?.addEventListener("click", clickEvent => {
-    document.location.href = "login.html"
+    document.location.href = "login.html";
 });
 const button = document.getElementById("submit");
 button?.addEventListener("click", clickEvent => {
@@ -43,7 +39,7 @@ button?.addEventListener("click", clickEvent => {
             .then((userCredentials) => {
                 // created account successfully
                 const user = userCredentials.user;
-                const userDoc = doc(db, `presenters/${user.uid}`);
+                const userDoc = doc(db, "presenters",`${user.uid}`);
                 const userData = {name: `${name}`};
                 setDoc(userDoc, userData).then(() => {
                     console.log(`Hi ${name}!`);
@@ -52,7 +48,7 @@ button?.addEventListener("click", clickEvent => {
                 }));
             }).then(() => {
                 alert("Account created");
-                document.location.href = `/presenter/login.html`
+                document.location.href = `login.html`
             }).catch((error) => {
                 //do something here with error
                 const errorCode = error.code;

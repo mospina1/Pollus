@@ -32,7 +32,7 @@ button?.addEventListener("click", clickEvent => {
         .then((userCredentials) => {
             // created account successfully
             const user = userCredentials.user;
-            const userDoc = doc(db, `examinees/${user.uid}`);
+            const userDoc = doc(db, "examinees",`${user.uid}`);
             const userData = {name: `${name}`};
             setDoc(userDoc, userData).then(() => {
                 console.log(`Hi ${name}!`);
