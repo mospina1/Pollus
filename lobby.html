@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby</title>
+    <link rel="stylesheet" href="lobby.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <img src="logo.png" alt="Pollus Logo" class="logo">
+        </div>
+
+        <!-- Lobby Heading -->
+        <h2 class="lobby-heading">Lobby - Waiting for Examinees</h2>
+
+        <!-- Start Poll Button (Visible Only for Instructor) -->
+        <button id="start-poll-btn" class="btn" style="display: none;">START THE POLL</button>
+
+        <!-- Examinee List -->
+        <div class="examinee-list">
+            <h3>Joined Examinees:</h3>
+            <ul id="examinee-names">
+                <!-- Names will be dynamically added here -->
+            </ul>
+        </div>
+
+        <!-- "Join Poll" Button (Visible Only for Examinee When Poll Starts) -->
+        <button id="join-poll-btn" class="btn" style="display: none;">Join Poll</button>
+    </div>
+
+    <script type="module" src="lobby.js"></script>
+</body>
+</html>
+
