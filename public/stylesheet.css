@@ -2,10 +2,19 @@ body {
   text-align: center; 
   background: #0042cf; 
   color: rgba(0,0,0,0.87); 
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  font-size: 50px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   margin: 0; 
-  padding: 0; }
+  padding: 0;
+  line-height: 35px;
+}
+
+h1 {
+  font-size: 50px;
+}
+
+#code, h2, #countdown {
+  font-size: 35px;
+}
 #selection, #A, #B, #C, #D { text-align: center; }
 #graph{
   size: 80%
@@ -13,7 +22,7 @@ body {
 #A, #B, #C, #D {
   padding: 50px 100px;
   border-radius: 50px;
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 35px;
   cursor: pointer;
   width: 300px;
@@ -43,7 +52,7 @@ body {
   background-color:rgb(11, 90, 160);
   cursor: pointer;
   transition: background-color 0.5s;
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 35px;
 }
 
@@ -53,10 +62,10 @@ body {
   background-color:rgb(11, 90, 160);
   cursor: pointer;
   transition: background-color 0.5s;
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-#start-poll button:hover{
+#start-poll:hover{
   background-color:rgb(14, 130, 233);
 }
 
@@ -66,7 +75,7 @@ body {
   background-color:rgb(11, 90, 160);
   cursor: pointer;
   transition: background-color 0.5s;
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 35px;
 } 
 #selection button:hover{

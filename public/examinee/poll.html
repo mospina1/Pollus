@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="refresh"content="">
+    <title>Pollus Web App</title>
+    <link rel="stylesheet" href="../stylesheet.css">
+
+  </head>
+  <body>
+    <div id="lobby">
+      <label>Waiting Room</label> <br>
+        <br>
+        <label>Welcome to the lobby</label>
+      <br>
+      <br>
+      <br>
+      <label id="name"></label>
+    </div>
+    <div id="results">
+      <p>Your score is <span id="score"></span></p>
+      <p>You got Questions <span id="wrong"></span> wrong</p>
+    </div>
+    <div id="question">
+        <button id="A" class="active">A</button>
+        <button id="B" class="active">B</button> <br>
+        <button id="C" class="active">C</button>
+        <button id="D" class="active">D</button>
+    </div>
+    <script defer type="module" src="poll.js"></script>
+  </body>
+</html>

@@ -14,11 +14,11 @@ function createResultsFile() {
     {
         let examinee_name = ; // examinee name from data base
 
-        content += examnee_name +"\t";
+        content += examinee_name +"\t";
         for (let j = 0; j < num_of_questions; i++)
         {
         let examnee_answer = ; // 0/1 for if q was right or wrong for question #j)
-        content += examnee_ansmer + "\t";
+        content += examinee_ansmer + "\t";
         }
         content += "\n";
     }

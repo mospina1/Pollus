@@ -167,7 +167,7 @@ async function initializePoll()
     let data = {
             ongoingPoll: false,
             questionIndex: Number(0)
-    }
+    };
     await updateDoc(pollRef, data);
 }
 
@@ -239,7 +239,7 @@ async function startPoll()
     let data = { 
         ongoingPoll: true,
         currentTime: Number(time),
-        questionIndex: Number(0)
+        questionIndex: Number(0),
     }
     await updateDoc(pollRef, data);
     setQuestion(0);
@@ -248,7 +248,7 @@ async function startPoll()
 
 async function endPoll()
 {
-    await updateDoc(pollRef, { ongoingPoll: false });
+    await updateDoc(pollRef, { ongoingPoll: false});
     results.style.display = "block";
     results.innerHTML += "<h1>You can export the results from the Presenter Homepage.</h1>";
     results.innerHTML += "<p>Press the Go Back Button to go to the Presenter Homepage.</p>"
