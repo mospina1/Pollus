@@ -16,10 +16,11 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 
-// const logout = async () => {
-//     await signOut(auth);
-// };
-//logout();
+const back = document.getElementById("back");
+back?.addEventListener("click", clickEvent => {
+    document.location.href = "../index.html";
+});
+
 const create = document.getElementById("create");
 
 create?.addEventListener("click", clickEvent => {

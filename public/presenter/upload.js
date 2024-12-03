@@ -27,6 +27,11 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+const back = document.getElementById("back");
+back?.addEventListener("click", clickEvent => {
+  document.location.href = "homepage.html";
+});
+
 const csvFileInput = document.getElementById('csvFileInput');
 const output = document.getElementById('output');
 const uploadButton = document.getElementById('uploadButton');

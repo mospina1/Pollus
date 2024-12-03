@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, getAuth, signOut } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import { initializeApp} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
@@ -38,14 +38,9 @@ button?.addEventListener("click", clickEvent => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
                 // created account successfully
-                const user = userCredentials.user;
-                const userDoc = doc(db, "presenters",`${user.uid}`);
-                const userData = {name: `${name}`};
-                setDoc(userDoc, userData).then(() => {
-                    console.log(`Hi ${name}!`);
-                }).catch((error => {
-                    alert(error.message);
-                }));
+                updateProfile(userCredentials.user, {
+                    displayName: `${name}`
+                  });
             }).then(() => {
                 alert("Account created");
                 document.location.href = `login.html`

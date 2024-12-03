@@ -65,10 +65,8 @@ async function getPresenterName(presenter)
     {
       console.log("User not signed in.");
     }
-    const docRef = doc(db, "presenters",`${presenter.uid}`);
-    const snapshot = await getDoc(docRef);
-    const data = snapshot.data();
-    nameHTML.textContent = data.name;
+    
+    nameHTML.textContent = presenter.displayName;
 }
 
 document.getElementById("upload").onclick = function(){
