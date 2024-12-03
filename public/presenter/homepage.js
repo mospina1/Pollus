@@ -36,9 +36,9 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-logout?.addEventListener("click", clickEvent => {
+logout?.addEventListener("click", async clickEvent => {
     clickEvent.preventDefault();
-    deleteRoom(presenter).then(
+    await deleteRoom(presenter).then(
     signOut(auth).then(function() {
         alert("Sign out successful")
       }).catch(function(error) {

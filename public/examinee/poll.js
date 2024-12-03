@@ -43,6 +43,7 @@ let examinee;
 let poll = new Poll();
 let examineeRef;
 let pollRef;
+let pollSize;
 onAuthStateChanged(auth, async (user) => {
     if (user)
     {
@@ -51,8 +52,11 @@ onAuthStateChanged(auth, async (user) => {
         console.log(examinee);
         await getRefs(examinee);
         await getExamineeName();
-        initializePoll();
-        await takePoll();
+        await initializePoll();
+        for (let i = 0; i < pollSize; i++)
+        {
+            await takePoll();
+        }
     }
 });
 
@@ -91,6 +95,9 @@ async function checkPollStarted()
     return ongoingPoll;
 }
 
+let selection = "";
+
+
 async function takePoll()
 {
     let questionIndex = await getQuestionIndex()
@@ -99,28 +106,32 @@ async function takePoll()
     while (ongoingPoll == false)
     {
         ongoingPoll = await checkPollStarted();
-        await sleep(500);
+        await sleep(333);
+        hideAnswers();
     }
+    displayAnswers();
     while (ongoingPoll == true)
     {
         hideLobby();
         questionIndex = await getQuestionIndex();
-        displayAnswers();
-        let selection = "";
-        
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                buttons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                selection = button.value;
+        buttons.forEach((option) => {
+            // Handle answer selection
+            option.addEventListener("click", () => {
+                buttons.forEach((button) => {
+                button.disabled = true; // Disable after selection
+            });
+            selection = option.value;
+            console.log(selection);
             });
         });
-        console.log(selection);
         let pollSnap = await getDoc(pollRef);
         let timer = pollSnap.data().currentTime;
         if (timer == 0)
         {
-            poll.addWrong(questionIndex + 1);
+            if (!poll.wrong.find(questionIndex + 1))
+            {
+                poll.addWrong(questionIndex + 1);
+            }
         }
         if (selection !== "")
         {
@@ -129,14 +140,10 @@ async function takePoll()
             await blockSelection(selection);
         }
         ongoingPoll = await checkPollStarted();
-        if (ongoingPoll == false)
-        {
-            hideAnswers();
-            endPoll();
-            break;
-        }
         // await sleep(333); // this is so the read/writes aren't called constantly, but may lead to answers not being submited
     }
+    hideAnswers();
+    endPoll()
 }
 
 function displayResults(total)
@@ -190,8 +197,10 @@ async function blockSelection(selection, questionIndex)
     await sleep(timer * 1000);
 }
 
-function initializePoll()
+async function initializePoll()
 {
+    let questionsRef = await getDocs(collection(pollRef, "questions"));
+    pollSize = questionsRef.size;
     hideAnswers();
     hideResults();
 }
@@ -210,8 +219,6 @@ async function getExamineeName()
 
 async function endPoll()
 {
-    let questionsRef = await getDocs(collections(pollRef, "questions"));
-    let pollSize = questionsRef.size;
     displayResults(pollSize);
 }
 function hideLobby()
@@ -233,6 +240,11 @@ function displayAnswers()
     b.style.backgroundColor = teal;
     c.style.backgroundColor = yellow;
     d.style.backgroundColor = orange;
+    buttons.forEach((options) => {
+        options.disabled = false;
+    });
+    selection = "";
+
 }
 
 function hideAnswers()

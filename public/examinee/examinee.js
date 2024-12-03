@@ -28,10 +28,10 @@ button?.addEventListener("click", clickEvent => {
     let name = document.getElementById("name").value;
     let room = document.getElementById("room code").value;
     signInAnonymously(auth)
-        .then((userCredentials) => {
+        .then(async (userCredentials) => {
             // created account successfully
             const user = userCredentials.user;
-            connectToRoom(room, name);
+            await connectToRoom(room, name);
         }).then(() => {
             document.location.href = `poll.html`
         }).catch((error) => {
