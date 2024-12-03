@@ -1,4 +1,4 @@
-import { getFirestore, getDoc, doc, collection, getDocs, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getFirestore, getDoc, doc, collection, getDocs, setDoc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import "https://cdn.jsdelivr.net/npm/chart.js"
@@ -75,6 +75,7 @@ onAuthStateChanged(auth, (user) => {
     pollRef = doc(db, "polls", `${presenter.uid}`);
     getTime(presenter);
     getPoll(presenter);
+    displayRoomCode(presenter);
     hideQuestion();
     checkPoll();
   }
@@ -84,6 +85,18 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+let code = document.getElementById("room code");
+async function displayRoomCode(presenter)
+{
+    let roomsRef = collection(db, "rooms");
+    let q = query(roomsRef, where(`uid`, `==`, `${presenter.uid}`))
+    const snapshot = await getDocs(q);
+    snapshot.forEach((docSnap) => {
+        let roomCode = `${docSnap.id}`;
+        code.textContent = roomCode;
+        console.log(roomCode);
+    });
+}
 // resumes poll if in progress and starts poll if not in progress
 async function checkPoll()
 {

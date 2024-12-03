@@ -1,6 +1,5 @@
 import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import { initializeApp} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -16,7 +15,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
-const db = getFirestore();
 
 const back = document.getElementById("back");
 back?.addEventListener("click", clickEvent => {

@@ -48,17 +48,17 @@ uploadButton.onclick = function() {
 async function deletePoll(presenter)
 {
   if (!presenter)
-    {
-      console.log("User not signed in.");
-      return;
-    }
-    const pollRef = doc(db, "polls",`${presenter.uid}`);
-    const questionsColl = collection(pollRef, "questions");
-    const snapshot = await getDocs(questionsColl);
-    for (let i = 0; i < snapshot.size; i++)
-    {
-      await deleteDoc(doc(questionsColl, `Question ${i + 1}`));
-    }
+  {
+    console.log("User not signed in.");
+    return;
+  }
+  const pollRef = doc(db, "polls",`${presenter.uid}`);
+  const questionsColl = collection(pollRef, "questions");
+  const snapshot = await getDocs(questionsColl);
+  for (let i = 0; i < snapshot.size; i++)
+  {
+    await deleteDoc(doc(questionsColl, `Question ${i + 1}`));
+  }
 }
 
 async function uploadPoll(presenter)

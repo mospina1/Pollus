@@ -1,4 +1,4 @@
-import { getFirestore, getDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getFirestore, getDoc, doc, updateDoc, setDoc, collection, deleteDoc, getDocs, where, query, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut} from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 
@@ -38,14 +38,32 @@ onAuthStateChanged(auth, (user) => {
 
 logout?.addEventListener("click", clickEvent => {
     clickEvent.preventDefault();
+    deleteRoom(presenter).then(
     signOut(auth).then(function() {
-        // Sign-out successful.
         alert("Sign out successful")
       }).catch(function(error) {
         // An error happened.
         alert(error.message);
-      });
+      }));
 });
+
+async function deleteRoom(presenter)
+{
+  if (!presenter)
+  {
+    console.log("User not signed in.");
+    return;
+  }
+  const roomsRef = collection(db, "rooms");
+  let q = query(roomsRef, where(`uid`, `==`, `${presenter.uid}`))
+  const snapshot = await getDocs(q);
+  const batch = writeBatch(db);
+  snapshot.forEach((docSnap) => {
+    batch.delete(doc(db, "rooms", docSnap.id)); 
+    console.log(`Marked for deletion: ${docSnap.id}`); 
+  });
+  batch.commit(); console.log('All marked documents deleted successfully');
+}
 
 setTime.onclick = async function () {
     const pollRef = doc(db, "polls",`${presenter.uid}`);
