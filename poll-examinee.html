@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examinee Poll</title>
+    <link rel="stylesheet" href="poll-examinee.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Question Display -->
+        <h2 id="question-text">Loading question...</h2>
+
+        <!-- Answer Choices -->
+        <div id="text-answers-container"></div>
+
+        <!-- Answer Buttons -->
+        <div id="answers-container">
+            <button class="answer-button" id="btn-A">A</button>
+            <button class="answer-button" id="btn-B">B</button>
+            <button class="answer-button" id="btn-C">C</button>
+            <button class="answer-button" id="btn-D">D</button>
+        </div>
+
+        <!-- Display the current score -->
+        <p id="score">Your Score: 0</p>
+    </div>
+
+    <script type="module" src="poll-examinee.js"></script>
+</body>
+</html>
+
