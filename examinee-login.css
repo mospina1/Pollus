@@ -1,0 +1,65 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #33A7A0; /* Background color */
+    color: white;
+    text-align: center;
+}
+
+/* Center Content */
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Logo Section */
+.logo {
+    width: 150px;
+    margin: 20px auto 40px;
+}
+
+/* Input Field */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    text-align: center;
+    background-color: white;
+    color: black;
+}
+
+.input-field::placeholder {
+    color: #ccc;
+    font-style: italic;
+}
+
+/* Join Button */
+.btn {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+}
+
+.btn:hover {
+    background-color: #333333;
+    transform: scale(1.05);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
